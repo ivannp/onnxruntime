@@ -24,8 +24,10 @@ template <typename T, typename ElemFunc>
 void cdist_single_threaded(const T* a, const T* b, T* dest, size_t ma, size_t mb, size_t n) {
   ElemFunc f;
   for (size_t i = 0; i != ma; ++i) {
+    // i-th row of matrix A
     const T* a1 = a + n * i;
     for (size_t j = 0; j != mb; ++j) {
+      // j-th row of matrix B
       const T* b1 = b + n * j;
       *dest++ = f(a1, b1, n);
     }
@@ -83,9 +85,7 @@ void cdist(const T* a, const T* b, T* dest, size_t ma, size_t mb, size_t n, conc
     return cdist_single_threaded<T, ElemFunc>(a, b, dest, ma, mb, n);
 #ifndef USE_OPENMP
   }
-  Eigen::ThreadPoolDevice device(&tp->GetHandler(), tp->NumThreads());
-  device.parallelFor(ma * mb, Eigen::TensorOpCost(0, 0, static_cast<double>(3 * n)),
-                     CDistOneBlock<T, ElemFunc>(a, b, dest, mb, n));
+  tp->ParallelFor(ma * mb, static_cast<double>(3 * n), CDistOneBlock<T, ElemFunc>(a, b, dest, mb, n));
 #endif
 }
 
