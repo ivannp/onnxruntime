@@ -24,7 +24,7 @@
 	url = https://github.com/google/re2.git
 [submodule "cmake/external/eigen"]
 	path = cmake/external/eigen
-	url = https://github.com/eigenteam/eigen-git-mirror.git
+	url = https://github.com/ivannp/eigen-git-mirror.git
 [submodule "cmake/external/grpc"]
 	path = cmake/external/grpc
 	url = https://github.com/grpc/grpc
